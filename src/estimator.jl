@@ -1,4 +1,14 @@
 
+
+struct EstimationResult{F, S, D, V}
+    success::Bool
+    L::F
+    optim_status::S
+    fitted_distribution::D
+    samples::V
+end
+
+
 """
     create_lipschitz_estimates(f, domain::AbstractDomain, n=10, m=200, δ=0.05)
 Create estimates of the Lipschitz constant for a function `f` over a given `domain`.
@@ -63,7 +73,17 @@ function estimate_lipschitz_constant(f, domain::AbstractDomain, n=10, m=200, δ=
     ls = create_lipschitz_estimates(f, domain, n, m, δ)
     initial_guess = [1.0, 1.0, 0.01 + 1.01 * maximum(ls)]
     optim_status, optim_result = fit_reversed_weibull(ls, initial_guess; alg=alg, kwargs...)
+
+    # create the result struct
+    result = EstimationResult(
+        Optim.converged(optim_status),
+        optim_result.μ,
+        optim_status,
+        optim_result,
+        ls
+    )
     
-    return Optim.converged(optim_status), optim_result.μ, optim_status, optim_result
+    # return Optim.converged(optim_status), optim_result.μ, optim_status, optim_result
+    return result
 
 end

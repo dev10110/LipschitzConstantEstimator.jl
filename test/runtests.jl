@@ -46,15 +46,16 @@ LCE = LipschitzConstantEstimator
         # Test the Estimator functionality
 
         
-        f1(x) = x[1] - x[1]^3/3
-        domain1 = IntervalDomain([0.0, 0.0], [1.0, 1.0])
+        f(x) = x[1] - x[1]^3/3
+        domain = IntervalDomain([0.0, 0.0], [1.0, 1.0])
 
         # Estimate the Lipschitz constant for f1
-        success1, μ1, _, _ = estimate_lipschitz_constant(f1, domain1)
-        @test success1
-        @test μ1 > 0.0
-        @test μ1 ≈ 1.0 atol=0.1
-        @test μ1 < 2.0  # Lipschitz constant should be less than 2 for this function
+        result = estimate_lipschitz_constant(f, domain)
+        @test result.success
+        μ = result.L
+        @test μ > 0.0
+        @test μ ≈ 1.0 atol=0.1
+        @test μ < 2.0  # Lipschitz constant should be less than 2 for this function
 
     end
 
