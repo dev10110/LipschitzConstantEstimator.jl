@@ -1,6 +1,9 @@
 using LipschitzConstantEstimator
 using Test
 using StaticArrays, LinearAlgebra, Distributions, Optim
+using Random
+
+Random.seed!(0)  # for reproducibility
 
 LCE = LipschitzConstantEstimator
 
