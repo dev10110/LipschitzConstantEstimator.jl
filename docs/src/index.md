@@ -37,7 +37,7 @@ results.optim_status
 
 ```@example main
 # get the fitted weibull distribution
-results.fitted_weibull
+results.fitted_distribution
 ```
 
 ```@example main
