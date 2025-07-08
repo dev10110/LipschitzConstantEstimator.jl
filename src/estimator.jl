@@ -1,5 +1,13 @@
 
-
+"""
+    EstimationResult
+A struct to hold the results of the Lipschitz constant estimation.
+- `success`: a boolean indicating whether the optimization converged.
+- `L`: the estimated Lipschitz constant.
+- `optim_status`: the status of the optimization process.
+- `fitted_distribution`: the fitted reversed Weibull distribution parameters.
+- `samples`: the samples used to estimate the Lipschitz constant.
+"""
 struct EstimationResult{F, S, D, V}
     success::Bool
     L::F

@@ -21,28 +21,29 @@ domain = IntervalDomain( [-1.0], [1.0])
 # run the estimator
 results = estimate_lipschitz_constant(f, domain);
 
-# destructure the results
-success, L, optim_status, fitted_weibull = results;
-
 # check the success code (should be true)
-success
+results.success
 ```
 
 ```@example main
 # get the estimated Lipschitz constant (should be close to 1)
-L
+results.L
 ```
 
 ```@example main 
 # check the optimization status
-optim_status
+results.optim_status
 ```
 
 ```@example main
 # get the fitted weibull distribution
-fitted_weibull
+results.fitted_weibull
 ```
 
+```@example main
+# get the individual samples of lipschitz constants used to fit the weibull
+results.samples
+```
 
 There are a few parameters to choose for the `estimate_lipschitz_constant` function, see the API below. 
 
