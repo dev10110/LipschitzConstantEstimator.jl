@@ -19,9 +19,9 @@ function create_lipschitz_estimates(f, domain::AbstractDomain, n=10, m=200, δ=0
     ls = zeros(m)
 
     # create m estimates of the lipschtiz constant
-    for i=1:m
-        # take the max over n samples
-        for j=1:n
+    # take the max over n samples
+    prog = Progress(n * m, desc="Collecting samples...")
+    for i=1:m, j=1:n
             x1, x2 = sample_pair(domain, δ)
 
             z1 = f(x1)
@@ -30,7 +30,7 @@ function create_lipschitz_estimates(f, domain::AbstractDomain, n=10, m=200, δ=0
             L = norm(z1- z2) / norm(x1 - x2)
             
             ls[i] = max(ls[i], L)
-        end
+            next!(prog)
     end
 
     # fit a reverse weibull distribution

@@ -18,13 +18,19 @@ f(x) = x[1] - x[1]^3 / 3
 # defined as IntervalDomain(lower_corner, upper_corner)
 domain = IntervalDomain( [-1.0], [1.0])
 
-# run the estimator
+# run the estimator 
 results = estimate_lipschitz_constant(f, domain);
 
-# destructure the results
-success, L, optim_status, fitted_weibull = results;
-println(success)
-println(L)
+# extract the result
+println(results.status)
+println(results.L)
 ```
 
-`L` should be close to ` in this case.
+`results.success` is a boolean, indicating whether `Optim.jl` thinks the problem converged.
+
+`results.L` is the estimated Lipschitz constant, should be close to `1` in this case.
+
+The `results` struct contains additional information that can be useful for debugging. See the documentation. 
+See the documentation for additional settings that you can tweak. 
+
+By default, it will call your function 1000 times to estimate the Lipschitz constant. 

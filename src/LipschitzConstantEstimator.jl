@@ -1,6 +1,6 @@
 module LipschitzConstantEstimator
 
-using LinearAlgebra, StaticArrays, Distributions, Optim
+using LinearAlgebra, StaticArrays, Distributions, Optim, ProgressMeter
 
 export IntervalDomain, RevWeibull3P, estimate_lipschitz_constant
 
