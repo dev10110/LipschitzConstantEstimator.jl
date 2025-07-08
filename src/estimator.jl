@@ -8,7 +8,7 @@ A struct to hold the results of the Lipschitz constant estimation.
 - `fitted_distribution`: the fitted reversed Weibull distribution parameters.
 - `samples`: the samples used to estimate the Lipschitz constant.
 """
-struct EstimationResult{F, S, D, V}
+struct EstimationResult{F,S,D,V}
     success::Bool
     L::F
     optim_status::S
@@ -29,31 +29,31 @@ and returns a vector of estimates.
 - `δ`: the distance within which to sample pairs of points (default is 0.05).
 The function returns a vector of `m` estimates of the Lipschitz constant.
 """
-function create_lipschitz_estimates(f, domain::AbstractDomain, n=10, m=200, δ=0.05)
+function create_lipschitz_estimates(f, domain::AbstractDomain, n = 10, m = 200, δ = 0.05)
 
     @assert δ > 0
-    
+
     # get each l
     ls = zeros(m)
 
     # create m estimates of the lipschtiz constant
     # take the max over n samples
-    prog = Progress(n * m, desc="Collecting samples...")
-    for i=1:m, j=1:n
-            x1, x2 = sample_pair(domain, δ)
+    prog = Progress(n * m, desc = "Collecting samples...")
+    for i = 1:m, j = 1:n
+        x1, x2 = sample_pair(domain, δ)
 
-            z1 = f(x1)
-            z2 = f(x2)
+        z1 = f(x1)
+        z2 = f(x2)
 
-            L = norm(z1- z2) / norm(x1 - x2)
-            
-            ls[i] = max(ls[i], L)
-            next!(prog)
+        L = norm(z1 - z2) / norm(x1 - x2)
+
+        ls[i] = max(ls[i], L)
+        next!(prog)
     end
 
     # fit a reverse weibull distribution
     return ls
-    
+
 end
 
 
@@ -76,11 +76,20 @@ The function returns a tuple containing
 - the fitted reversed Weibull distribution parameters.
 The Lipschitz constant is estimated as the location parameter `μ` of the fitted reversed Weibull distribution.
 """
-function estimate_lipschitz_constant(f, domain::AbstractDomain, n=10, m=200, δ=0.05; alg = LBFGS(), kwargs...)
+function estimate_lipschitz_constant(
+    f,
+    domain::AbstractDomain,
+    n = 10,
+    m = 200,
+    δ = 0.05;
+    alg = LBFGS(),
+    kwargs...,
+)
 
     ls = create_lipschitz_estimates(f, domain, n, m, δ)
     initial_guess = [1.0, 1.0, 0.01 + 1.01 * maximum(ls)]
-    optim_status, optim_result = fit_reversed_weibull(ls, initial_guess; alg=alg, kwargs...)
+    optim_status, optim_result =
+        fit_reversed_weibull(ls, initial_guess; alg = alg, kwargs...)
 
     # create the result struct
     result = EstimationResult(
@@ -88,9 +97,9 @@ function estimate_lipschitz_constant(f, domain::AbstractDomain, n=10, m=200, δ=
         optim_result.μ,
         optim_status,
         optim_result,
-        ls
+        ls,
     )
-    
+
     # return Optim.converged(optim_status), optim_result.μ, optim_status, optim_result
     return result
 

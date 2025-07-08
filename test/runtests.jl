@@ -25,12 +25,12 @@ LCE = LipschitzConstantEstimator
         @test cdf(dist, 3.0) ≈ 1.0
 
         # test cdf using analytic formula
-        for x in -1.0:0.1:3.5
+        for x = -1.0:0.1:3.5
             @test cdf(dist, x) ≈ (x > 3.0 ? 1.0 : exp(-((dist.μ - x) / dist.λ)^dist.k))
         end
-        
+
         # generate a bunch of samples
-        samples = [rand(dist) for _ in 1:1000]
+        samples = [rand(dist) for _ = 1:1000]
         # fit a reversed weibull distribution to the samples
         success, fitted_dist = LCE.fit_reversed_weibull(samples)
 
@@ -45,7 +45,7 @@ LCE = LipschitzConstantEstimator
     @testset "Estimator" begin
         # Test the Estimator functionality
 
-        
+
         f(x) = x[1] - x[1]^3/3
         domain = IntervalDomain([0.0, 0.0], [1.0, 1.0])
 

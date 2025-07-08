@@ -86,7 +86,12 @@ The default initial guess is `[1.0, 1.0, 1.01 * maximum(data)]`, which ensures t
 The optimization algorithm can be specified using the `alg` parameter, with `NelderMead()` as the default.
 Additional keyword arguments can be passed to the `optimize` function.
 """
-function fit_reversed_weibull(data, initial_guess = [1.0, 1.0, 1.01 * maximum(data)]; alg=LBFGS(), kwargs...)
+function fit_reversed_weibull(
+    data,
+    initial_guess = [1.0, 1.0, 1.01 * maximum(data)];
+    alg = LBFGS(),
+    kwargs...,
+)
 
     # Optimize
     result = optimize(p -> negloglik(p, data), initial_guess, alg; kwargs...)
